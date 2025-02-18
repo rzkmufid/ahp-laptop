@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: users.php");
     exit();
 }
+
+include 'includes/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -67,3 +69,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php include 'includes/footer.php'; ?>

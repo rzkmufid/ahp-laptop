@@ -27,7 +27,7 @@ $scores = [
     'storage_score' => '',
     'gpu_score' => '',
     'display_score' => '',
-    'harga_score' => ''  // Added missing harga_score
+    'harga_score' => ''
 ];
 
 if (isset($_GET['id'])) {
@@ -154,204 +154,226 @@ include 'includes/header.php';
 
 ?>
 
-    <div class="container mt-4">
-        <h2><?= isset($_GET['id']) ? 'Edit' : 'Add' ?> Product</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= isset($_GET['id']) ? 'Edit' : 'Add' ?> Product - GAPTECH STORE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+        }
+        .card {
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #555;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
 
-        <?php if (isset($error)): ?>
-        <div class="alert alert-danger"><?= $error ?></div>
-        <?php endif; ?>
+<div class="container mt-5">
+    <h1 class="mb-4"><?= isset($_GET['id']) ? 'Edit' : 'Add' ?> Product</h1>
 
-        <form method="POST" enctype="multipart/form-data" class="mb-5">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($product['id']) ?>">
+    <?php if (isset($error)): ?>
+    <div class="alert alert-danger"><?= $error ?></div>
+    <?php endif; ?>
 
-            <!-- Basic Information -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Basic Information</h5>
+    <form method="POST" enctype="multipart/form-data" class="mb-5">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($product['id']) ?>">
+
+        <!-- Basic Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Basic Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name"
+                        value="<?= htmlspecialchars($product['name']) ?>" required>
                 </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name"
-                            value="<?= htmlspecialchars($product['name']) ?>" required>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="3"
+                        required><?= htmlspecialchars($product['description']) ?></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price (Rp)</label>
+                        <input type="number" class="form-control" name="price" value="<?= $product['price'] ?>"
+                            required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="3"
-                            required><?= htmlspecialchars($product['description']) ?></textarea>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock</label>
+                        <input type="number" class="form-control" name="stock" value="<?= $product['stock'] ?>"
+                            required>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Price (Rp)</label>
-                            <input type="number" class="form-control" name="price" value="<?= $product['price'] ?>"
-                                required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Stock</label>
-                            <input type="number" class="form-control" name="stock" value="<?= $product['stock'] ?>"
-                                required>
-                        </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <?php if ($product['image']): ?>
+                    <div class="mb-2">
+                        <img src="../img/laptops/<?= htmlspecialchars($product['image']) ?>"
+                            style="max-width: 200px;">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Image</label>
-                        <?php if ($product['image']): ?>
-                        <div class="mb-2">
-                            <img src="../img/laptops/<?= htmlspecialchars($product['image']) ?>"
-                                style="max-width: 200px;">
-                        </div>
-                        <?php endif; ?>
-                        <input type="file" class="form-control" name="image"
-                            <?= !isset($_GET['id']) ? 'required' : '' ?>>
+                    <?php endif; ?>
+                    <input type="file" class="form-control" name="image"
+                        <?= !isset($_GET['id']) ? 'required' : '' ?>>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Specifications</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Processor</label>
+                        <input type="text" class="form-control" name="processor"
+                            value="<?= htmlspecialchars($specs['processor']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Processor Detail</label>
+                        <input type="text" class="form-control" name="processor_detail"
+                            value="<?= htmlspecialchars($specs['processor_detail']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RAM</label>
+                        <input type="text" class="form-control" name="ram"
+                            value="<?= htmlspecialchars($specs['ram']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Storage</label>
+                        <input type="text" class="form-control" name="storage"
+                            value="<?= htmlspecialchars($specs['storage']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">GPU</label>
+                        <input type="text" class="form-control" name="gpu"
+                            value="<?= htmlspecialchars($specs['gpu']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Display</label>
+                        <input type="text" class="form-control" name="display"
+                            value="<?= htmlspecialchars($specs['display']) ?>" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Battery</label>
+                        <input type="text" class="form-control" name="battery"
+                            value="<?= htmlspecialchars($specs['battery']) ?>" required>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Specifications -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Specifications</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Processor</label>
-                            <input type="text" class="form-control" name="processor"
-                                value="<?= htmlspecialchars($specs['processor']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Processor Detail</label>
-                            <input type="text" class="form-control" name="processor_detail"
-                                value="<?= htmlspecialchars($specs['processor_detail']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">RAM</label>
-                            <input type="text" class="form-control" name="ram"
-                                value="<?= htmlspecialchars($specs['ram']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Storage</label>
-                            <input type="text" class="form-control" name="storage"
-                                value="<?= htmlspecialchars($specs['storage']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">GPU</label>
-                            <input type="text" class="form-control" name="gpu"
-                                value="<?= htmlspecialchars($specs['gpu']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Display</label>
-                            <input type="text" class="form-control" name="display"
-                                value="<?= htmlspecialchars($specs['display']) ?>" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Battery</label>
-                            <input type="text" class="form-control" name="battery"
-                                value="<?= htmlspecialchars($specs['battery']) ?>" required>
-                        </div>
+        <!-- AHP Scores -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">AHP Scores</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price Score</label>
+                        <select class="form-select" name="harga_score" required>
+                            <option value="" <?= empty($scores['harga_score']) ? 'selected' : '' ?>>Select Price</option>
+                            <option value="1" <?= $scores['harga_score'] == 1 ? 'selected' : '' ?>>15 juta</option>
+                            <option value="0.75" <?= $scores['harga_score'] == 0.75 ? 'selected' : '' ?>>13 juta - 15 juta</option>
+                            <option value="0.5" <?= $scores['harga_score'] == 0.5 ? 'selected' : '' ?>>11 juta - 13 juta</option>
+                            <option value="0.25" <?= $scores['harga_score'] == 0.25 ? 'selected' : '' ?>>9 juta - 11 juta</option>
+                            <option value="0.1" <?= $scores['harga_score'] == 0.1 ? 'selected' : '' ?>><9 juta</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Processor Score</label>
+                        <select class="form-select" name="processor_score" required>
+                            <option value="" <?= empty($scores['processor_score']) ? 'selected' : '' ?>>Select Processor</option>
+                            <option value="1" <?= $scores['processor_score'] == 1 ? 'selected' : '' ?>>Intel Core i9/AMD Ryzen 9</option>
+                            <option value="0.75" <?= $scores['processor_score'] == 0.75 ? 'selected' : '' ?>>Intel Core i7/AMD Ryzen 7</option>
+                            <option value="0.5" <?= $scores['processor_score'] == 0.5 ? 'selected' : '' ?>>Intel Core i5/AMD Ryzen 5</option>
+                            <option value="0.25" <?= $scores['processor_score'] == 0.25 ? 'selected' : '' ?>>Intel Core i3/AMD Ryzen 3</option>
+                            <option value="0.1" <?= $scores['processor_score'] == 0.1 ? 'selected' : '' ?>>Intel Celeron/AMD Athlon</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RAM Score</label>
+                        <select class="form-select" name="ram_score" required>
+                            <option value="" <?= empty($scores['ram_score']) ? 'selected' : '' ?>>Select RAM</option>
+                            <option value="1" <?= $scores['ram_score'] == 1 ? 'selected' : '' ?>>64 GB</option>
+                            <option value="0.75" <?= $scores['ram_score'] == 0.75 ? 'selected' : '' ?>>32 GB</option>
+                            <option value="0.5" <?= $scores['ram_score'] == 0.5 ? 'selected' : '' ?>>16 GB</option>
+                            <option value="0.25" <?= $scores['ram_score'] == 0.25 ? 'selected' : '' ?>>12 GB</option>
+                            <option value="0.1" <?= $scores['ram_score'] == 0.1 ? 'selected' : '' ?>>8 GB</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Storage Score</label>
+                        <select class="form-select" name="storage_score" required>
+                            <option value="" <?= empty($scores['storage_score']) ? 'selected' : '' ?>>Select Storage</option>
+                            <option value="1" <?= $scores['storage_score'] == 1 ? 'selected' : '' ?>>>1 TB</option>
+                            <option value="0.75" <?= $scores['storage_score'] == 0.75 ? 'selected' : '' ?>>1 TB</option>
+                            <option value="0.5" <?= $scores['storage_score'] == 0.5 ? 'selected' : '' ?>>512 GB</option>
+                            <option value="0.25" <?= $scores['storage_score'] == 0.25 ? 'selected' : '' ?>>256 GB</option>
+                            <option value="0.1" <?= $scores['storage_score'] == 0.1 ? 'selected' : '' ?>>128 GB</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">GPU Score</label>
+                        <select class="form-select" name="gpu_score" required>
+                            <option value="" <?= empty($scores['gpu_score']) ? 'selected' : '' ?>>Select GPU</option>
+                            <option value="1" <?= $scores['gpu_score'] == 1 ? 'selected' : '' ?>>NVIDIA RTX 4000 Series</option>
+                            <option value="0.75" <?= $scores['gpu_score'] == 0.75 ? 'selected' : '' ?>>NVIDIA RTX 3000 Series</option>
+                            <option value="0.5" <?= $scores['gpu_score'] == 0.5 ? 'selected' : '' ?>>NVIDIA RTX 2000 Series</option>
+                            <option value="0.25" <?= $scores['gpu_score'] == 0.25 ? 'selected' : '' ?>>Intel Iris Xe/AMD Radeon</option>
+                            <option value="0.1" <?= $scores['gpu_score'] == 0.1 ? 'selected' : '' ?>>Intel UHD Graphics</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Display Score</label>
+                        <select class="form-select" name="display_score" required>
+                            <option value="" <?= empty($scores['display_score']) ? 'selected' : '' ?>>Select Display</option>
+                            <option value="1" <?= $scores['display_score'] == 1 ? 'selected' : '' ?>>OLED</option>
+                            <option value="0.75" <?= $scores['display_score'] == 0.75 ? 'selected' : '' ?>>FHD IPS Touchscreen</option>
+                            <option value="0.5" <?= $scores['display_score'] == 0.5 ? 'selected' : '' ?>>FHD IPS</option>
+                            <option value="0.25" <?= $scores['display_score'] == 0.25 ? 'selected' : '' ?>>FHD</option>
+                            <option value="0.1" <?= $scores['display_score'] == 0.1 ? 'selected' : '' ?>>HD</option>
+                        </select>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- AHP Scores -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">AHP Scores</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Price Score</label>
-                            <select class="form-select" name="harga_score" required>
-                                <option value="1" <?= $scores['harga_score'] == 1 ? 'selected' : '' ?>>>15 juta</option>
-                                <option value="0.75" <?= $scores['harga_score'] == 0.75 ? 'selected' : '' ?>>13 juta -
-                                    15 juta</option>
-                                <option value="0.5" <?= $scores['harga_score'] == 0.5 ? 'selected' : '' ?>>11 juta - 13
-                                    juta</option>
-                                <option value="0.25" <?= $scores['harga_score'] == 0.25 ? 'selected' : '' ?>>9 juta - 11
-                                    juta</option>
-                                <option value="0.1" <?= $scores['harga_score'] == 0.1 ? 'selected' : '' ?>>
-                                    <9 juta</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Processor Score</label>
-                            <select class="form-select" name="processor_score" required>
-                                <option value="1" <?= $scores['processor_score'] == 1 ? 'selected' : '' ?>>Intel Core
-                                    i9/AMD Ryzen 9</option>
-                                <option value="0.75" <?= $scores['processor_score'] == 0.75 ? 'selected' : '' ?>>Intel
-                                    Core i7/AMD Ryzen 7</option>
-                                <option value="0.5" <?= $scores['processor_score'] == 0.5 ? 'selected' : '' ?>>Intel
-                                    Core i5/AMD Ryzen 5</option>
-                                <option value="0.25" <?= $scores['processor_score'] == 0.25 ? 'selected' : '' ?>>Intel
-                                    Core i3/AMD Ryzen 3</option>
-                                <option value="0.1" <?= $scores['processor_score'] == 0.1 ? 'selected' : '' ?>>Intel
-                                    Celeron/AMD Athlon</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">RAM Score</label>
-                            <select class="form-select" name="ram_score" required>
-                                <option value="1" <?= $scores['ram_score'] == 1 ? 'selected' : '' ?>>64 GB</option>
-                                <option value="0.75" <?= $scores['ram_score'] == 0.75 ? 'selected' : '' ?>>32 GB
-                                </option>
-                                <option value="0.5" <?= $scores['ram_score'] == 0.5 ? 'selected' : '' ?>>16 GB</option>
-                                <option value="0.25" <?= $scores['ram_score'] == 0.25 ? 'selected' : '' ?>>12 GB
-                                </option>
-                                <option value="0.1" <?= $scores['ram_score'] == 0.1 ? 'selected' : '' ?>>8 GB</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Storage Score</label>
-                            <select class="form-select" name="storage_score" required>
-                                <option value="1" <?= $scores['storage_score'] == 1 ? 'selected' : '' ?>>>1 TB</option>
-                                <option value="0.75" <?= $scores['storage_score'] == 0.75 ? 'selected' : '' ?>>1 TB
-                                </option>
-                                <option value="0.5" <?= $scores['storage_score'] == 0.5 ? 'selected' : '' ?>>512 GB
-                                </option>
-                                <option value="0.25" <?= $scores['storage_score'] == 0.25 ? 'selected' : '' ?>>256 GB
-                                </option>
-                                <option value="0.1" <?= $scores['storage_score'] == 0.1 ? 'selected' : '' ?>>128 GB
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">GPU Score</label>
-                            <select class="form-select" name="gpu_score" required>
-                                <option value="1" <?= $scores['gpu_score'] == 1 ? 'selected' : '' ?>>NVIDIA RTX 4000
-                                    Series</option>
-                                <option value="0.75" <?= $scores['gpu_score'] == 0.75 ? 'selected' : '' ?>>NVIDIA RTX
-                                    3000 Series</option>
-                                <option value="0.5" <?= $scores['gpu_score'] == 0.5 ? 'selected' : '' ?>>NVIDIA RTX 2000
-                                    Series</option>
-                                <option value="0.25" <?= $scores['gpu_score'] == 0.25 ? 'selected' : '' ?>>Intel Iris
-                                    Xe/AMD Radeon</option>
-                                <option value="0.1" <?= $scores['gpu_score'] == 0.1 ? 'selected' : '' ?>>Intel UHD
-                                    Graphics</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Display Score</label>
-                            <select class="form-select" name="display_score" required>
-                                <option value="1" <?= $scores['display_score'] == 1 ? 'selected' : '' ?>>OLED
-                                </option>
-                                <option value="0.75" <?= $scores['display_score'] == 0.75 ? 'selected' : '' ?>>FHD IPS Touchscreen
-                                </option>
-                                <option value="0.5" <?= $scores['display_score'] == 0.5 ? 'selected' : '' ?>>FHD IPS
-                                </option>
-                                <option value="0.25" <?= $scores['display_score'] == 0.25 ? 'selected' : '' ?>>FHD TN
-                                </option>
-                                <option value="0.1" <?= $scores['display_score'] == 0.1 ? 'selected' : '' ?>>HD</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-custom">Save Product</button>
+            <a href="products.php" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-dark">Save Product</button>
-                <a href="products.php" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
 <?php include 'includes/footer.php'; ?>

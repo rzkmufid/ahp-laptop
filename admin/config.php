@@ -18,13 +18,13 @@ session_start();
 
 // Function to check if admin is logged in
 function isLoggedIn() {
-    return isset($_SESSION['admin_id']);
-}
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+};
 
 // Function to redirect if not logged in
 function requireLogin() {
     if (!isLoggedIn()) {
-        header("Location: login.php");
+        header("Location: ../login.php");
         exit();
     }
 }

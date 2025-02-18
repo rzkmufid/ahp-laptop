@@ -10,9 +10,9 @@ class AHP {
     private $CR;
     private $calculationDetails;
 
-    public function __construct() {
-        // Inisialisasi matriks perbandingan berdasarkan data yang diberikan
-        $criteria_comparison = [
+    public function __construct($userCriteria = null) {
+        // Kriteria default jika user tidak memasukkan input
+        $default_criteria_comparison = [
             ["C1", "C2", 3],
             ["C1", "C3", 2],
             ["C1", "C4", 2],
@@ -29,6 +29,9 @@ class AHP {
             ["C4", "C6", 3],
             ["C5", "C6", 2],
         ];
+
+        // Gunakan input pengguna jika tersedia, jika tidak pakai default
+        $criteria_comparison = (!empty($userCriteria)) ? $userCriteria : $default_criteria_comparison;
 
         $this->initializePairwiseMatrix($criteria_comparison);
     }
@@ -50,13 +53,15 @@ class AHP {
 
     private function calculatePriorities() {
         $columnSums = array_fill(0, 6, 0);
-        
+
         // Hitung jumlah kolom
         foreach ($this->pairwiseMatrix as $row) {
             foreach ($row as $colIndex => $value) {
                 $columnSums[$colIndex] += $value;
             }
         }
+
+        $this->calculationDetails['columnSums'] = $columnSums;
 
         // Normalisasi matriks dan hitung prioritas
         $this->normalizedMatrix = [];
@@ -92,55 +97,128 @@ class AHP {
         $this->CR = $this->CI / 1.24; // RI untuk n=6 adalah 1.24
     }
 
+    // public function compareLaptops($laptops) {
+    //     $this->calculatePriorities();
+    //     $this->calculateConsistency();
+
+    //     // Simpan detail perhitungan
+    //     $this->calculationDetails = [
+    //         'pairwiseMatrix' => $this->pairwiseMatrix,
+    //         'normalizedMatrix' => $this->normalizedMatrix,
+    //         'priorities' => $this->priorities,
+    //         'weightedSums' => $this->weightedSums,
+    //         'lambdaValues' => $this->lambdaValues,
+    //         'lambdaMax' => $this->lambdaMax,
+    //         'CI' => $this->CI,
+    //         'CR' => $this->CR
+    //     ];
+
+    //     // Hitung skor akhir untuk setiap laptop
+    //     $results = [];
+    //     // foreach ($laptops as $laptop) {
+    //     //     $score = 0;
+    //     //     $score += $laptop['processor_score'] * $this->priorities[0];
+    //     //     $score += $laptop['ram_score'] * $this->priorities[1];
+    //     //     $score += $laptop['storage_score'] * $this->priorities[2];
+    //     //     $score += $laptop['gpu_score'] * $this->priorities[3];
+    //     //     $score += $laptop['display_score'] * $this->priorities[4];
+    //     //     $score += $laptop['harga_score'] * $this->priorities[5];
+
+    //     //     $results[$laptop['name']] = [
+    //     //         'score' => $score,
+    //     //         'details' => [
+    //     //             'processor' => $laptop['processor_score'] * $this->priorities[0],
+    //     //             'ram' => $laptop['ram_score'] * $this->priorities[1],
+    //     //             'storage' => $laptop['storage_score'] * $this->priorities[2],
+    //     //             'gpu' => $laptop['gpu_score'] * $this->priorities[3],
+    //     //             'display' => $laptop['display_score'] * $this->priorities[4],
+    //     //             'harga' => $laptop['harga_score'] * $this->priorities[5]
+    //     //         ]
+    //     //     ];
+    //     // }
+    //     foreach ($laptops as $laptop) {
+    //         $score = 0;
+    //         $details = [];
+        
+    //         $details['processor'] = $laptop['processor_score'] * $this->priorities[0];
+    //         echo $laptop['processor_score'];
+    //         $details['ram'] = $laptop['ram_score'] * $this->priorities[1];
+    //         $details['storage'] = $laptop['storage_score'] * $this->priorities[2];
+    //         $details['gpu'] = $laptop['gpu_score'] * $this->priorities[3];
+    //         $details['display'] = $laptop['display_score'] * $this->priorities[4];
+    //         $details['harga'] = $laptop['harga_score'] * $this->priorities[5];
+        
+    //         $score = array_sum($details); // Total semua nilai
+        
+    //         $results[$laptop['name']] = [
+    //             'score' => $score,
+    //             'details' => $details
+    //         ];
+    //     }
+        
+
+    //     // Urutkan hasil berdasarkan skor tertinggi
+    //     uasort($results, function($a, $b) {
+    //         return $b['score'] <=> $a['score'];
+    //     });
+
+    //     return $results;
+    // }
+
     public function compareLaptops($laptops) {
         $this->calculatePriorities();
         $this->calculateConsistency();
-
+    
         // Simpan detail perhitungan
         $this->calculationDetails = [
             'pairwiseMatrix' => $this->pairwiseMatrix,
             'normalizedMatrix' => $this->normalizedMatrix,
-            'priorities' => $this->priorities,
+            'priorities' => $this->priorities, // ✅ Menggunakan Prioritas dari tahap 3️⃣
             'weightedSums' => $this->weightedSums,
             'lambdaValues' => $this->lambdaValues,
             'lambdaMax' => $this->lambdaMax,
             'CI' => $this->CI,
             'CR' => $this->CR
         ];
-
-        // Hitung skor akhir untuk setiap laptop
+    
+        // **Pastikan urutan kriteria sesuai dengan mapping yang benar**
+        // C1 = harga, C2 = layar, C3 = CPU, C4 = GPU, C5 = Storage, C6 = RAM
         $results = [];
         foreach ($laptops as $laptop) {
             $score = 0;
-            $score += $laptop['processor_score'] * $this->priorities[0];
-            $score += $laptop['ram_score'] * $this->priorities[1];
-            $score += $laptop['storage_score'] * $this->priorities[2];
-            $score += $laptop['gpu_score'] * $this->priorities[3];
-            $score += $laptop['display_score'] * $this->priorities[4];
-            $score += $laptop['harga_score'] * $this->priorities[5];
-
-            $results[$laptop['name']] = [
+            $details = [];
+    
+            // **Mengalikan nilai alternatif dengan bobot prioritas yang benar**
+            $details['harga']   = $laptop['harga_score'] * $this->priorities[0]; // C1
+            $details['display'] = $laptop['display_score'] * $this->priorities[1]; // C2
+            $details['cpu']     = $laptop['processor_score'] * $this->priorities[2]; // C3
+            $details['gpu']     = $laptop['gpu_score'] * $this->priorities[3]; // C4
+            $details['storage'] = $laptop['storage_score'] * $this->priorities[4]; // C5
+            $details['ram']     = $laptop['ram_score'] * $this->priorities[5]; // C6
+    
+            // Total skor akhir
+            $score = array_sum($details);
+    
+            // Simpan hasil ke array
+            $results[$laptop['id']] = [
+                'name' => $laptop['name'],
                 'score' => $score,
-                'details' => [
-                    'processor' => $laptop['processor_score'] * $this->priorities[0],
-                    'ram' => $laptop['ram_score'] * $this->priorities[1],
-                    'storage' => $laptop['storage_score'] * $this->priorities[2],
-                    'gpu' => $laptop['gpu_score'] * $this->priorities[3],
-                    'display' => $laptop['display_score'] * $this->priorities[4],
-                    'harga' => $laptop['harga_score'] * $this->priorities[5]
-                ]
+                'details' => $details
             ];
         }
-
+    
         // Urutkan hasil berdasarkan skor tertinggi
-        uasort($results, function($a, $b) {
+        uasort($results, function ($a, $b) {
             return $b['score'] <=> $a['score'];
         });
-
+    
         return $results;
     }
+    
+    
 
     public function getCalculationDetails() {
         return $this->calculationDetails;
     }
 }
+?>

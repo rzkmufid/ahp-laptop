@@ -62,10 +62,10 @@ INSERT INTO `ahp_scores` (`id`, `product_id`, `processor_score`, `ram_score`, `s
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart`
+-- Table structure for table `wishlist`
 --
 
-CREATE TABLE `cart` (
+CREATE TABLE `wishlist` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
@@ -73,10 +73,10 @@ CREATE TABLE `cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cart`
+-- Dumping data for table `wishlist`
 --
 
-INSERT INTO `cart` (`id`, `user_id`, `product_id`, `quantity`) VALUES
+INSERT INTO `wishlist` (`id`, `user_id`, `product_id`, `quantity`) VALUES
 (1, 1, 9, 1);
 
 -- --------------------------------------------------------
@@ -240,9 +240,9 @@ ALTER TABLE `ahp_scores`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `cart`
+-- Indexes for table `wishlist`
 --
-ALTER TABLE `cart`
+ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -288,9 +288,9 @@ ALTER TABLE `ahp_scores`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `cart`
+-- AUTO_INCREMENT for table `wishlist`
 --
-ALTER TABLE `cart`
+ALTER TABLE `wishlist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
