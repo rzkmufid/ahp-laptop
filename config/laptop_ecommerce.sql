@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2025 at 08:50 AM
+-- Generation Time: Feb 18, 2025 at 01:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,40 +44,20 @@ CREATE TABLE `ahp_scores` (
 
 INSERT INTO `ahp_scores` (`id`, `product_id`, `processor_score`, `ram_score`, `storage_score`, `gpu_score`, `display_score`, `harga_score`) VALUES
 (4, 10, 0.75, 0.5, 0.5, 0.25, 0.5, 0.25),
-(5, 11, 0.5, 0.1, 0.5, 0.75, 0.5, 0.75),
-(6, 12, 0.5, 0.1, 0.5, 0.5, 0.5, 0.25),
-(7, 13, 0.75, 0.5, 0.5, 0.75, 0.5, 1),
-(8, 14, 0.75, 0.5, 0.5, 1, 0.5, 1),
-(9, 15, 0.5, 0.1, 0.5, 0.25, 0.5, 0.25),
+(5, 11, 0.5, 0.1, 0.5, 0.75, 0.25, 0.75),
+(6, 12, 0.5, 0.1, 0.5, 0.5, 0.25, 0.25),
+(7, 13, 0.75, 0.5, 0.5, 0.75, 0.25, 1),
+(8, 14, 0.75, 0.5, 0.5, 1, 0.25, 1),
+(9, 15, 0.5, 0.1, 0.5, 0.25, 0.25, 0.25),
 (10, 16, 0.75, 0.5, 0.75, 0.25, 0.75, 1),
 (11, 17, 0.75, 0.5, 0.5, 0.25, 0.5, 0.1),
-(12, 18, 0.75, 0.5, 0.5, 0.25, 0.5, 0.5),
+(12, 18, 0.75, 0.5, 0.5, 0.25, 0.25, 0.5),
 (13, 19, 0.75, 0.1, 0.5, 0.1, 0.5, 0.5),
 (14, 20, 0.5, 0.5, 0.5, 0.1, 1, 0.75),
-(15, 21, 0.5, 0.1, 0.5, 0.5, 0.5, 0.25),
-(16, 22, 0.5, 0.5, 1, 0.5, 0.5, 0.25),
+(15, 21, 0.5, 0.1, 0.5, 0.5, 0.25, 0.25),
+(16, 22, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25),
 (17, 23, 0.5, 0.1, 0.5, 0.5, 0.5, 0.5),
-(18, 24, 0.5, 0.25, 0.5, 0.5, 0.5, 0.5);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `wishlist`
---
-
-CREATE TABLE `wishlist` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
-  `quantity` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `wishlist`
---
-
-INSERT INTO `wishlist` (`id`, `user_id`, `product_id`, `quantity`) VALUES
-(1, 1, 9, 1);
+(18, 24, 0.5, 0.25, 0.5, 0.5, 0.25, 0.5);
 
 -- --------------------------------------------------------
 
@@ -121,57 +101,6 @@ INSERT INTO `laptop_specifications` (`id`, `product_id`, `processor`, `processor
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
---
-
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `total_amount` decimal(10,2) NOT NULL,
-  `status` varchar(20) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `status`, `created_at`) VALUES
-(1, 0, 19.00, 'pending', '2025-02-14 10:45:49'),
-(2, 1, 95.00, 'Rejected', '2025-02-14 10:49:29'),
-(3, 1, 1499.99, 'Processed', '2025-02-14 10:49:54'),
-(4, 1, 1499.99, 'Pending', '2025-02-14 10:51:48'),
-(5, 2, 8899000.00, 'Pending', '2025-02-15 03:50:40'),
-(6, 2, 12000000.00, 'Pending', '2025-02-15 05:30:53');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_details`
---
-
-CREATE TABLE `order_details` (
-  `id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
-  `quantity` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `order_details`
---
-
-INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(1, 2, 7, 5, 19.00),
-(2, 3, 1, 1, 1499.99),
-(3, 4, 1, 1, 1499.99),
-(4, 5, 17, 1, 8899000.00),
-(5, 6, 18, 1, 12000000.00);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `products`
 --
 
@@ -200,7 +129,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `image`, 
 (17, 'Acer 3-A314', 'Acer 3-A314\r\n', 8899000.00, 842, '67af6d1898ee4.png', '2025-02-14 16:19:36'),
 (18, 'Acer SWIFT 14', 'Acer SWIFT 14\r\n', 12000000.00, 145, '67af6d8990e56.jpg', '2025-02-14 16:21:29'),
 (19, 'Acer Aspire 5', 'Acer Aspire 5\r\n', 13000000.00, 342, '67af6de8bffe4.jpg', '2025-02-14 16:23:04'),
-(20, 'Acer SWIFT 3 OLED', 'Acer SWIFT 3 OLED\r\n', 14.00, 442, '67af6e312d935.webp', '2025-02-14 16:24:17'),
+(20, 'Acer SWIFT 3 OLED', 'Acer SWIFT 3 OLED\r\n', 14000000.00, 442, '67af6e312d935.webp', '2025-02-14 16:24:17'),
 (21, 'MSI THIN G 15', 'MSI THIN G 15\r\n', 9999000.00, 111, '67af6e75120a0.png', '2025-02-14 16:25:25'),
 (22, 'MSI THIN G 15', 'MSI THIN G 15\r\n', 10599000.00, 331, '67af6ee875a86.png', '2025-02-14 16:27:20'),
 (23, 'Acer NITRO V15', 'Acer NITRO V15\r\n', 11699000.00, 200, '67af6f32412d8.jpg', '2025-02-14 16:28:34'),
@@ -217,6 +146,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `role` enum('admin','user') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -224,9 +154,34 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`) VALUES
-(1, 'admin', 'admin@gmail.com', '$2y$10$ndX42XDvi0tX52patjFTQueqBBaPNUu8PXo5pHDrp3yFZffndBV12', '2025-02-14 10:49:18'),
-(2, 'user', 'user@gmail.com', '$2y$10$zR85OWl.4LpauCFU.leYS.vtx1HW0B9LnMc6tAkAK81PGFkLah8tS', '2025-02-15 03:49:27');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`) VALUES
+(1, 'admin', 'admin@gmail.com', '$2y$10$ndX42XDvi0tX52patjFTQueqBBaPNUu8PXo5pHDrp3yFZffndBV12', 'admin', '2025-02-14 10:49:18'),
+(2, 'user', 'user@gmail.com', '$2y$10$zR85OWl.4LpauCFU.leYS.vtx1HW0B9LnMc6tAkAK81PGFkLah8tS', 'user', '2025-02-15 03:49:27'),
+(3, 'user2', 'user2@gmail.com', '$2y$10$7AHA3TX4IpL/wvssNAb5nuiz6Lufo9/ZoB/coMg7lh/8f0QK34yUa', 'user', '2025-02-18 00:27:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist`
+--
+
+CREATE TABLE `wishlist` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `user_id`, `product_id`, `quantity`) VALUES
+(1, 1, 9, 1),
+(4, 2, 17, 1),
+(7, 2, 16, 1),
+(8, 2, 21, 1),
+(9, 3, 17, 1);
 
 --
 -- Indexes for dumped tables
@@ -240,30 +195,11 @@ ALTER TABLE `ahp_scores`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `laptop_specifications`
 --
 ALTER TABLE `laptop_specifications`
   ADD PRIMARY KEY (`id`),
   ADD KEY `product_id` (`product_id`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `order_details`
---
-ALTER TABLE `order_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `products`
@@ -278,6 +214,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -288,28 +230,10 @@ ALTER TABLE `ahp_scores`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `wishlist`
---
-ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT for table `laptop_specifications`
 --
 ALTER TABLE `laptop_specifications`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `order_details`
---
-ALTER TABLE `order_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -321,7 +245,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
